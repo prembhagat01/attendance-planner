@@ -1,0 +1,466 @@
+/* ==========================================
+   Bunkwise styles
+   1. Colors and basics
+   2. Buttons and inputs
+   3. Login page
+   4. Student dashboard
+   5. Subject card
+   6. Teacher dashboard
+   7. Mobile screens
+   ========================================== */
+
+
+/* ---------- 1. Colors and basics ---------- */
+:root {
+  --bg: #faf7f4;        /* page background */
+  --surface: #ffffff;   /* cards */
+  --line: #ebe4dc;      /* borders */
+  --text: #1f1b16;      /* main text */
+  --muted: #7a7068;     /* secondary text */
+
+  --brand: #f26b1d;     /* orange accent */
+  --tint: #fff0e5;      /* light peach */
+  --tint-border: #ffd9bd;
+
+  /* Attendance status colors */
+  --safe: #0d8a43;
+  --warning: #b26f00;
+  --danger: #d12f40;
+
+  --shadow: 0 1px 2px rgba(40, 30, 20, 0.04), 0 8px 24px rgba(40, 30, 20, 0.05);
+  --shadow-hover: 0 2px 4px rgba(40, 30, 20, 0.05), 0 14px 32px rgba(40, 30, 20, 0.09);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Sora", system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 48px 0;
+}
+
+
+/* ---------- 2. Buttons and inputs ---------- */
+input,
+select {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+input:focus,
+button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-main {
+  background: var(--brand);
+  color: #fff;
+  font-weight: 700;
+  padding: 12px 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(242, 107, 29, 0.28);
+}
+.btn-main:hover {
+  filter: brightness(1.06);
+}
+
+.btn-ghost {
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  padding: 8px 16px;
+  border-radius: 10px;
+}
+.btn-ghost:hover {
+  background: var(--tint);
+  color: var(--text);
+}
+
+
+/* ---------- 3. Login page ---------- */
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding: 48px 8vw;
+}
+
+.login-intro h1 {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  line-height: 1.15;
+  max-width: 14ch;
+}
+
+.login-intro p {
+  color: var(--muted);
+  margin: 20px 0 32px;
+  max-width: 46ch;
+}
+
+/* The pulsing green circle on the left */
+.sample-ring {
+  width: 190px;
+  height: 190px;
+  border-radius: 50%;
+  border: 10px solid var(--safe);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  animation: pulse 3s ease-in-out infinite;
+}
+.sample-ring span {
+  font-size: 3.4rem;
+  font-weight: 700;
+  color: var(--safe);
+  line-height: 1;
+}
+.sample-ring small {
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 6px;
+}
+
+@keyframes pulse {
+  50% { box-shadow: 0 0 0 14px rgba(13, 138, 67, 0.1); }
+}
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.switch {
+  color: var(--muted);
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: center;
+}
+.switch:hover {
+  color: var(--text);
+}
+
+
+/* ---------- 4. Student dashboard ---------- */
+.dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+.dashboard header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+/* The three boxes at the top */
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.summary div {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 20px;
+}
+.summary strong {
+  display: block;
+  font-size: 2rem;
+}
+.summary span {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.summary .bad strong {
+  color: var(--danger);
+}
+
+/* Overall goal box */
+.target-box {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: var(--tint);
+  border: 1px solid var(--tint-border);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+}
+.target-box label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.target-box input {
+  width: 120px;
+  background: #fff;
+}
+.target-text {
+  flex: 1;
+  min-width: 220px;
+  font-weight: 600;
+  color: var(--safe);
+}
+.target-text.need {
+  color: var(--warning);
+}
+
+/* Add subject form */
+.add-form {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+.add-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+
+/* ---------- 5. Subject card ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--safe);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 22px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+.card.warning { border-left-color: var(--warning); }
+.card.danger  { border-left-color: var(--danger); }
+
+.card-top {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+.count {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Circle progress */
+.ring-bg {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 9;
+}
+.ring {
+  fill: none;
+  stroke: var(--safe);
+  stroke-width: 9;
+  stroke-linecap: round;
+  transition: stroke-dasharray 0.5s;
+}
+.warning .ring { stroke: var(--warning); }
+.danger .ring  { stroke: var(--danger); }
+
+.ring-text {
+  fill: var(--text);
+  font-size: 20px;
+  font-weight: 700;
+  font-family: inherit;
+}
+
+/* Message under the circle changes color with the status */
+.message {
+  margin: 16px 0;
+  font-weight: 600;
+}
+.safe .message    { color: var(--safe); }
+.warning .message { color: var(--warning); }
+.danger .message  { color: var(--danger); }
+
+/* Present and Absent buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+}
+.actions button {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.btn-present {
+  background: rgba(13, 138, 67, 0.12);
+  color: var(--safe);
+}
+.btn-absent {
+  background: rgba(209, 47, 64, 0.1);
+  color: var(--danger);
+}
+
+/* "If I skip the next ... classes" box */
+.whatif {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line);
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.whatif input {
+  width: 56px;
+  padding: 4px 8px;
+  margin: 0 6px;
+}
+.whatif b {
+  color: var(--text);
+}
+
+.remove {
+  background: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+  margin-top: 14px;
+}
+.remove:hover {
+  color: var(--danger);
+}
+
+
+/* ---------- 6. Teacher dashboard ---------- */
+.search {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  text-align: left;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+}
+th {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+td small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.low {
+  color: var(--danger);
+  font-weight: 700;
+}
+.low small {
+  display: inline;
+  font-weight: 400;
+}
+
+
+/* ---------- 7. Mobile screens ---------- */
+@media (max-width: 800px) {
+  .login-page { grid-template-columns: 1fr; padding: 32px 24px; }
+  .add-form { grid-template-columns: 1fr 1fr; }
+  .add-form label:first-child { grid-column: 1 / -1; }
+  .summary { grid-template-columns: 1fr; }
+}
+
+/* Turn off animations for people who prefer less motion */
+@media (prefers-reduced-motion: reduce) {
+  .sample-ring { animation: none; }
+  .ring { transition: none; }
+  .card { transition: none; }
+}
+
+/* ---------- 8. Admin ---------- */
+.header-buttons { display: flex; gap: 10px; align-items: center; }
+.btn-small { font-size: 0.8rem; padding: 6px 12px; }
+
+.admin-login { min-height: 100vh; display: grid; place-items: center; padding: 24px; }
+.admin-login .login-card { width: 100%; max-width: 380px; }
+
+.admin-summary { grid-template-columns: repeat(4, 1fr); }
+.check { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.9rem; margin-bottom: 16px; }
+
+@media (max-width: 800px) {
+  .admin-summary { grid-template-columns: 1fr 1fr; }
+}
