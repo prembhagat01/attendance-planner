@@ -1,5 +1,6 @@
 // Run this ONE time to create the admin account.
 // Usage: node createAdmin.js 'Your Name' you@email.com 'YourStrongPassword'
+require("dns").setServers(["8.8.8.8", "8.8.4.4"]);
 require("dotenv").config();
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
