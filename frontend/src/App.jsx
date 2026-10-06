@@ -3,6 +3,7 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
+import Footer from "./components/Footer.jsx";
 
 export default function App() {
   const [name, setName] = useState(localStorage.getItem("name"));
@@ -24,23 +25,29 @@ export default function App() {
     setRole(null);
   }
 
+  // Decide which page to show
+  let page;
   if (showAdminLogin) {
-    return <AdminLogin onLogin={handleLogin} onBack={() => setShowAdminLogin(false)} />;
+    page = <AdminLogin onLogin={handleLogin} onBack={() => setShowAdminLogin(false)} />;
+  } else if (!name) {
+    page = <Login onLogin={handleLogin} />;
+  } else if (role === "admin") {
+    page = <AdminDashboard name={name} onLogout={handleLogout} />;
+  } else {
+    page = (
+      <Dashboard
+        name={name}
+        onLogout={handleLogout}
+        onAdmin={() => setShowAdminLogin(true)}
+      />
+    );
   }
 
-  if (!name) {
-    return <Login onLogin={handleLogin} />;
-  }
-
-  if (role === "admin") {
-    return <AdminDashboard name={name} onLogout={handleLogout} />;
-  }
-
+  // The footer is shown under every page
   return (
-    <Dashboard
-      name={name}
-      onLogout={handleLogout}
-      onAdmin={() => setShowAdminLogin(true)}
-    />
+    <div className="app">
+      {page}
+      <Footer />
+    </div>
   );
 }
