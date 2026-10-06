@@ -464,3 +464,30 @@ td small {
 @media (max-width: 800px) {
   .admin-summary { grid-template-columns: 1fr 1fr; }
 }
+
+/* ---------- Footer ---------- */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app > .dashboard {
+  width: 100%;
+  flex: 1;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px 8vw;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 800px) {
+  .footer { flex-direction: column; text-align: center; }
+}
