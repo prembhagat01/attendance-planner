@@ -51,10 +51,11 @@ export default function Dashboard({ name, onLogout, onAdmin }) {
     }
   }
 
-  async function markClass(id, present) {
-    await api(`/subjects/${id}/mark`, "POST", { present });
-    loadSubjects();
+    async function markClass(id, present) {
+    const updated = await api(`/subjects/${id}/mark`, "POST", { present });
+    setSubjects(subjects.map((s) => (s._id === id ? updated : s)));
   }
+  
 
   async function removeSubject(id) {
     await api(`/subjects/${id}`, "DELETE");
