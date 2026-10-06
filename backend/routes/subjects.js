@@ -33,13 +33,15 @@ router.post("/", async (req, res) => {
 });
 
 // POST /api/subjects/:id/mark - mark one class as present or absent
+// One database call: add 1 to total, and add 1 to attended if present
 router.post("/:id/mark", async (req, res) => {
-  const subject = await Subject.findOne({ _id: req.params.id, user: req.userId });
-  if (!subject) return res.status(404).json({ message: "Subject not found" });
+  const subject = await Subject.findOneAndUpdate(
+    { _id: req.params.id, user: req.userId },
+    { $inc: { total: 1, attended: req.body.present ? 1 : 0 } },
+    { new: true } // send back the updated subject
+  );
 
-  subject.total += 1;
-  if (req.body.present) subject.attended += 1;
-  await subject.save();
+  if (!subject) return res.status(404).json({ message: "Subject not found" });
   res.json(subject);
 });
 

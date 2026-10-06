@@ -42,24 +42,43 @@ export default function Dashboard({ name, onLogout, onAdmin }) {
   async function addSubject(e) {
     e.preventDefault();
     try {
-      await api("/subjects", "POST", form);
+      const created = await api("/subjects", "POST", form);
+      setSubjects((current) => [...current, created]);
       setForm(emptyForm);
       setError("");
-      loadSubjects();
     } catch (err) {
       setError(err.message);
     }
   }
 
-    async function markClass(id, present) {
-    const updated = await api(`/subjects/${id}/mark`, "POST", { present });
-    setSubjects(subjects.map((s) => (s._id === id ? updated : s)));
+  async function markClass(id, present) {
+    // Change the screen first, so the click feels instant
+    setSubjects((current) =>
+      current.map((s) =>
+        s._id === id
+          ? { ...s, total: s.total + 1, attended: s.attended + (present ? 1 : 0) }
+          : s
+      )
+    );
+
+    try {
+      await api(`/subjects/${id}/mark`, "POST", { present });
+    } catch (err) {
+      setError(err.message);
+      loadSubjects(); // put the real numbers back if saving failed
+    }
   }
-  
 
   async function removeSubject(id) {
-    await api(`/subjects/${id}`, "DELETE");
-    loadSubjects();
+    // Remove it from the screen first, then tell the server
+    setSubjects((current) => current.filter((s) => s._id !== id));
+
+    try {
+      await api(`/subjects/${id}`, "DELETE");
+    } catch (err) {
+      setError(err.message);
+      loadSubjects();
+    }
   }
 
   // ---------- Small handlers ----------
@@ -113,6 +132,7 @@ export default function Dashboard({ name, onLogout, onAdmin }) {
           </button>
         </div>
       </header>
+
       {/* Three boxes at the top */}
       <section className="summary">
         <div>
