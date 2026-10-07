@@ -7,6 +7,9 @@ const { startAlerts } = require("./utils/alerts");
 
 const app = express();
 
+// Render sits behind a proxy, so trust it to get the real visitor address
+app.set("trust proxy", 1);
+
 // Only allow requests from our own frontend when deployed (allows all locally)
 app.use(cors({ origin: process.env.FRONTEND_URL || "*" }));
 app.use(express.json());
