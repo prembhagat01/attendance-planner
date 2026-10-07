@@ -17,10 +17,11 @@ exports.login = async (req, res) => {
   res.json({ token, name: admin.name, role: "admin" });
 };
 
-// GET /api/admin/users - all students and a few numbers
+// GET /api/admin/users - all verified students and a few numbers
 exports.getUsers = async (req, res) => {
-  const users = await User.find({ role: "student" })
-    .select("-password") // never send passwords
+  // Old accounts have no emailVerified field, so we only skip the ones set to false
+  const users = await User.find({ role: "student", emailVerified: { $ne: false } })
+    .select("-password -otpHash") // never send secrets
     .sort({ createdAt: -1 }); // newest first
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);

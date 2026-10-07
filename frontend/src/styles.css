@@ -500,3 +500,5 @@ tr:last-child td {
   color: var(--muted);
   font-size: 0.85rem;
 }
+
+.info { color: var(--safe); font-size: 0.9rem; }

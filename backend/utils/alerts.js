@@ -1,16 +1,17 @@
 // Runs every day at 8 AM and emails students whose attendance is in danger or on the edge.
 const cron = require("node-cron");
-const nodemailer = require("nodemailer");
 const Subject = require("../models/Subject");
 const { getPercent, classesNeeded, getStatus } = require("./attendance");
+const { sendEmail } = require("./sendEmail");
 
 async function sendSubjectAlerts() {
-  const subjects = await Subject.find().populate("user", "name email");
+  const subjects = await Subject.find().populate("user", "name email emailVerified");
 
   // Group the problem subjects by student
   const byStudent = {};
   for (const s of subjects) {
-    if (!s.user) continue;
+    if (!s.user || s.user.emailVerified === false) continue;
+
     const status = getStatus(s.attended, s.total, s.required);
     if (status === "safe") continue;
 
@@ -25,26 +26,12 @@ async function sendSubjectAlerts() {
     byStudent[id].lines.push(line);
   }
 
-  const canEmail = process.env.EMAIL_USER && process.env.EMAIL_PASS;
-  const transporter = canEmail
-    ? nodemailer.createTransport({
-        service: "gmail",
-        auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-      })
-    : null;
-
   for (const { user, lines } of Object.values(byStudent)) {
     const text = `Hi ${user.name},\n\nYour attendance needs attention:\n\n${lines.join("\n")}\n\n- Bunkwise`;
-
-    if (transporter) {
-      await transporter.sendMail({
-        from: process.env.EMAIL_USER,
-        to: user.email,
-        subject: "Attendance alert from Bunkwise",
-        text,
-      });
-    } else {
-      console.log("Alert (email not configured) for", user.email, "\n" + text);
+    try {
+      await sendEmail(user.email, "Attendance alert from Bunkwise", text);
+    } catch (err) {
+      console.log("Alert email failed:", err.message);
     }
   }
 }
