@@ -24,9 +24,19 @@ export async function api(path, method = "GET", body) {
   try {
     data = text ? JSON.parse(text) : {};
   } catch (err) {
-    throw new Error("The server sent an unexpected reply. Check the backend terminal.");
+    throw new Error("The server sent an unexpected reply. Please try again.");
   }
 
-  if (!res.ok) throw new Error(data.message || "Server is not responding. Check the backend terminal.");
+  // 401 means the login expired or is invalid: clear it and go back to the home page
+  if (res.status === 401) {
+    localStorage.clear();
+    window.location.href = "/";
+  }
+
+  if (!res.ok) {
+    const error = new Error(data.message || "Something went wrong");
+    error.data = data; // lets the caller read extra fields from the server's reply
+    throw error;
+  }
   return data;
 }
