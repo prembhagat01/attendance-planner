@@ -8,7 +8,9 @@ import Footer from "./components/Footer.jsx";
 export default function App() {
   const [name, setName] = useState(localStorage.getItem("name"));
   const [role, setRole] = useState(localStorage.getItem("role"));
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
+
+  // The admin page opens only when you type /admin in the address bar
+  const isAdminPage = window.location.pathname === "/admin";
 
   function handleLogin(data) {
     localStorage.setItem("token", data.token);
@@ -16,7 +18,6 @@ export default function App() {
     localStorage.setItem("role", data.role);
     setName(data.name);
     setRole(data.role);
-    setShowAdminLogin(false);
   }
 
   function handleLogout() {
@@ -27,23 +28,16 @@ export default function App() {
 
   // Decide which page to show
   let page;
-  if (showAdminLogin) {
-    page = <AdminLogin onLogin={handleLogin} onBack={() => setShowAdminLogin(false)} />;
+  if (role === "admin") {
+    page = <AdminDashboard name={name} onLogout={handleLogout} />;
+  } else if (isAdminPage) {
+    page = <AdminLogin onLogin={handleLogin} onBack={() => (window.location.href = "/")} />;
   } else if (!name) {
     page = <Login onLogin={handleLogin} />;
-  } else if (role === "admin") {
-    page = <AdminDashboard name={name} onLogout={handleLogout} />;
   } else {
-    page = (
-      <Dashboard
-        name={name}
-        onLogout={handleLogout}
-        onAdmin={() => setShowAdminLogin(true)}
-      />
-    );
+    page = <Dashboard name={name} onLogout={handleLogout} />;
   }
 
-  // The footer is shown under every page
   return (
     <div className="app">
       {page}

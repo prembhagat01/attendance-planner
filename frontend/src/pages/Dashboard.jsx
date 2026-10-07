@@ -21,7 +21,7 @@ function getGoalMessage(goal, attended, total) {
   return `You are already above ${goal}%. You can miss ${canMiss} more ${word} and still stay there`;
 }
 
-export default function Dashboard({ name, onLogout, onAdmin }) {
+export default function Dashboard({ name, onLogout }) {
   const [subjects, setSubjects] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
@@ -123,14 +123,9 @@ export default function Dashboard({ name, onLogout, onAdmin }) {
     <div className="dashboard">
       <header>
         <h1>Hi {name}</h1>
-        <div className="header-buttons">
-          <button className="btn-ghost btn-small" onClick={onAdmin}>
-            Admin
-          </button>
-          <button className="btn-ghost" onClick={onLogout}>
-            Log out
-          </button>
-        </div>
+        <button className="btn-ghost" onClick={onLogout}>
+          Log out
+        </button>
       </header>
 
       {/* Three boxes at the top */}
