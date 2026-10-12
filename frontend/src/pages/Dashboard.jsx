@@ -29,6 +29,9 @@ export default function Dashboard({ name, onLogout }) {
   // The overall goal is saved in the browser so it stays after a refresh
   const [goal, setGoal] = useState(Number(localStorage.getItem("goal")) || 75);
 
+  // Overall what-if: how many classes (in total) I might skip
+  const [skipAll, setSkipAll] = useState(0);
+
   // ---------- Talking to the backend ----------
   async function loadSubjects() {
     const data = await api("/subjects");
@@ -95,6 +98,10 @@ export default function Dashboard({ name, onLogout }) {
     localStorage.setItem("goal", value);
   }
 
+  function handleSkipAllChange(e) {
+    setSkipAll(Math.max(0, Number(e.target.value)));
+  }
+
   // ---------- Numbers shown on the page ----------
   // Subjects in danger come first so the student notices them
   const statusOrder = { danger: 0, warning: 1, safe: 2 };
@@ -117,6 +124,10 @@ export default function Dashboard({ name, onLogout }) {
   const goalMessage = getGoalMessage(goal, totalAttended, totalClasses);
   const goalIsValid = goal >= 1 && goal <= 99;
   const needsMoreClasses = goalIsValid && classesNeeded(totalAttended, totalClasses, goal) > 0;
+
+  // Overall what-if: my overall percentage after skipping some classes
+  const afterSkipPercent = getPercent(totalAttended, totalClasses + skipAll);
+  const stillAboveGoal = afterSkipPercent >= goal;
 
   // ---------- What appears on the screen ----------
   return (
@@ -152,6 +163,19 @@ export default function Dashboard({ name, onLogout }) {
         </label>
         <p className={needsMoreClasses ? "target-text need" : "target-text"}>{goalMessage}</p>
       </section>
+
+      {/* Overall what-if: skip some classes in total */}
+      {subjects.length > 0 && (
+        <section className="whatif-box">
+          <span>If I skip the next</span>
+          <input type="number" min="0" value={skipAll} onChange={handleSkipAllChange} />
+          <span>classes in total, my overall attendance will be</span>
+          <b>{afterSkipPercent.toFixed(1)}%</b>
+          <span className={stillAboveGoal ? "result-safe" : "result-danger"}>
+            {stillAboveGoal ? `(still above your ${goal}% goal)` : `(below your ${goal}% goal)`}
+          </span>
+        </section>
+      )}
 
       {/* Add subject form */}
       <form className="add-form" onSubmit={addSubject}>
