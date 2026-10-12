@@ -502,3 +502,38 @@ tr:last-child td {
 }
 
 .info { color: var(--safe); font-size: 0.9rem; }
+
+/* ---------- Predictions ---------- */
+.whatif-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  border-radius: 16px;
+  padding: 16px 22px;
+  margin-bottom: 24px;
+}
+.whatif-box input {
+  width: 80px;
+}
+.whatif-box b {
+  font-size: 1.3rem;
+}
+
+.result-safe {
+  color: var(--safe);
+  font-weight: 600;
+}
+.result-danger {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.whatif-result {
+  margin-top: 8px;
+  font-weight: 600;
+  color: var(--text);
+}
