@@ -1,8 +1,8 @@
 const Subject = require("../models/Subject");
 
-// GET /api/subjects - all subjects of the logged-in student
+// GET /api/subjects - all subjects of the logged-in student, oldest first
 exports.getSubjects = async (req, res) => {
-  const subjects = await Subject.find({ user: req.userId });
+  const subjects = await Subject.find({ user: req.userId }).sort({ _id: 1 });
   res.json(subjects);
 };
 

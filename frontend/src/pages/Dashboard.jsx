@@ -46,7 +46,7 @@ export default function Dashboard({ name, onLogout }) {
     e.preventDefault();
     try {
       const created = await api("/subjects", "POST", form);
-      setSubjects((current) => [...current, created]);
+      setSubjects((current) => [...current, created]); // a new subject goes at the end
       setForm(emptyForm);
       setError("");
     } catch (err) {
@@ -55,7 +55,7 @@ export default function Dashboard({ name, onLogout }) {
   }
 
   async function markClass(id, present) {
-    // Change the screen first, so the click feels instant
+    // Change the screen first, so the click feels instant. The order stays the same.
     setSubjects((current) =>
       current.map((s) =>
         s._id === id
@@ -103,14 +103,6 @@ export default function Dashboard({ name, onLogout }) {
   }
 
   // ---------- Numbers shown on the page ----------
-  // Subjects in danger come first so the student notices them
-  const statusOrder = { danger: 0, warning: 1, safe: 2 };
-  const sortedSubjects = [...subjects].sort((a, b) => {
-    const statusA = getStatus(a.attended, a.total, a.required);
-    const statusB = getStatus(b.attended, b.total, b.required);
-    return statusOrder[statusA] - statusOrder[statusB];
-  });
-
   const subjectsBelowLimit = subjects.filter(
     (s) => getStatus(s.attended, s.total, s.required) === "danger"
   ).length;
@@ -222,14 +214,14 @@ export default function Dashboard({ name, onLogout }) {
       </form>
       {error && <p className="error">{error}</p>}
 
-      {/* Subject cards */}
+      {/* Subject cards, always in the order they were created */}
       {subjects.length === 0 ? (
         <p className="empty">
           Add your first subject above to see how many classes you can safely skip.
         </p>
       ) : (
         <div className="grid">
-          {sortedSubjects.map((subject) => (
+          {subjects.map((subject) => (
             <SubjectCard
               key={subject._id}
               subject={subject}
